@@ -8,11 +8,11 @@ package Extraordinario;
  *
  * @author Usuario
  */
-public class Electrodomesticos extends Electronicos{
+public class Electrodomestico extends Electronicos{
     
     private String categoria;
     
-    public Electrodomesticos (Integer id, String nombre, double precio, int stock, String tipo){
+    public Electrodomestico (Integer id, String nombre, double precio, int stock, String tipo, String categoria){
         super(id, nombre, precio, stock, tipo);
         this.categoria = categoria;
     }

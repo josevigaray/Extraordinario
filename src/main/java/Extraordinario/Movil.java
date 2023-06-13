@@ -8,11 +8,11 @@ package Extraordinario;
  *
  * @author Usuario
  */
-public class Moviles extends Electronicos {
+public class Movil extends Electronicos {
     
     private String marca;
     
-    public Moviles (Integer id, String nombre, double precio, int stock, String tipo){
+    public Movil (Integer id, String nombre, double precio, int stock, String tipo, String marca){
         super (id, nombre, precio, stock, tipo);
         this.marca = marca;
     }

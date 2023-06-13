@@ -5,10 +5,13 @@
 package Extraordinario;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -39,11 +42,11 @@ public class DBManager {
     private static final String DB_CONT = "Electronicos";
     private static final String DB_CONT_SELECT = "SELECT * FROM " + DB_CONT;
     private static final String DB_CONT_ID = "id";
-    private static final String DB_CONT_NOMBRE = "nombre";
-    private static final String DB_CONT_PRECIO = "precio";
+    private static final String DB_CONT_NOM = "nombre";
+    private static final String DB_CONT_PRE = "precio";
     private static final String DB_CONT_STOCK = "stock";
     private static final String DB_CONT_TIPO = "tipo";
-    private static final String DB_CONT_CATEGORIA = "categoria";
+    private static final String DB_CONT_CAT = "categoria";
     private static final String DB_CONT_MARCA = "marca";
     private static final String DB_CONT_SO = "sistema_operativo";
     
@@ -122,12 +125,37 @@ public class DBManager {
         try {
             Statement stmt = conn.createStatement(resultSetType, resultSetConcurrency);
             ResultSet rs = stmt.executeQuery(DB_CONT_SELECT);
-            //stmt.close();
             return rs;
         } catch (SQLException ex) {
             ex.printStackTrace();
             return null;
         }
 
+    }
+    
+    public static ArrayList<Electronicos> mapeaELectronicos() {
+
+        ArrayList<Electronicos> listaDeArticulosElectronicos = new ArrayList();
+        try {
+            ResultSet rs = DBManager.getTablaElectronica(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+            while (rs.next()) {
+                //Para cada registro, añade una autora al ArrayList
+                Integer id = rs.getInt(DB_CONT_ID);
+                String nombre = rs.getString(DB_CONT_NOM);
+                double precio = rs.getDouble(DB_CONT_PRE);
+                int stock = rs.getInt(DB_CONT_STOCK);
+                String tipo = rs.getString(DB_CONT_TIPO);
+                String categoria = rs.getString(DB_CONT_CAT);
+                String marca = rs.getString(DB_CONT_MARCA);
+                String so = rs.getString(DB_CONT_SO);
+                Electronicos nuevoArt = Extraordinario.creaArticulo(id, nombre, precio, stock, tipo, categoria, marca, so);
+                listaDeArticulosElectronicos.add(nuevoArt);
+            }
+            rs.close();
+            return listaDeAutoras;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 }

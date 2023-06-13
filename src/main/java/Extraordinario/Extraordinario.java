@@ -1,7 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
-
 package Extraordinario;
 
 import java.io.FileWriter;
@@ -15,12 +14,19 @@ import java.util.Scanner;
  *
  * @author Usuario
  */
-
 public class Extraordinario {
 
     private static ArrayList<Electronicos> articulosElectronicos;
     private static final String CSV_FILE_IN = "tienda_electronica.csv";
-    
+
+    public static void almacenarDatos() {
+        if (DBManager.loadDriver() && DBManager.connect()) {
+            //leo dela BD y cargo en estructura
+            articulosElectronicos = DBManager.mapeaelectronicos();
+            DBManager.close();
+        }
+    }
+
     public static int pideInt(String mensaje) {
 
         while (true) {
@@ -49,22 +55,59 @@ public class Extraordinario {
             }
         }
     }
-    
+
     public static Electronicos creaArticulo(Integer id, String nombre, double precio, int stock, String tipo, String categoria, String marca, String SO) {
-        Electronicos artElectronico;
-        switch () {
+        Electronicos nuevoArt = null;
+        switch (categoria + marca + SO) {
             case "ELectrodomesticos":
-                artElectronico = new Electrodomestico(id, nombre, precio, stock, tipo, categoria);
+                nuevoArt = new Electrodomestico(id, nombre, precio, stock, tipo, categoria);
                 break;
             case "Moviles":
-                artElectronico = new Movil(id, nombre, precio, stock, tipo, marca);
+                nuevoArt = new Movil(id, nombre, precio, stock, tipo, marca);
                 break;
             case "Tablets":
-                artElectronico = new Tablet(id, nombre, precio, stock, tipo, SO);
+                nuevoArt = new Tablet(id, nombre, precio, stock, tipo, SO);
         }
-        return artElectronico;
+        return nuevoArt;
     }
-    
+
+    public static boolean menuPrincipal() {
+        System.out.println("");
+        System.out.println("MENU PRINCIPAL");
+        System.out.println("1. Mostar datos de un producto por id");
+        System.out.println("2. Mostrar stock total por tipo de producto");
+        System.out.println("3. Mostrar el número de productos por sistema operativo");
+        System.out.println("4. Añadir un producto a su coleccion o estructura de datos");
+        System.out.println("5. Salir");
+        try {
+            int opcion = pideInt("Elige una opción: ");
+            switch (opcion) {
+                case 1:
+
+                    return false;
+                case 2:
+
+                    return false;
+                case 3:
+
+                    return false;
+                case 4:
+
+                    return false;
+                case 5:
+                    return true;
+                default:
+                    System.out.println("Opción elegida incorrecta");
+                    return false;
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Escribe una opción numérica válida");
+            return false;
+        }
+
+    }
+
     public static void guardarDatosEnCSV() {
         FileWriter fichero;
         try {
@@ -77,8 +120,8 @@ public class Extraordinario {
                 fichero = new FileWriter(nombreAlternativo);
             }
 
-            for (Autora autora : listaDeAutoras) {
-                fichero.write(autora.toStringCSV());
+            for (Electronicos artElectronico : articulosElectronicos) {
+                fichero.write(artElectronico.toString());
                 fichero.write("\n");
             }
             fichero.close();
@@ -87,7 +130,18 @@ public class Extraordinario {
         }
 
     }
+
     public static void main(String[] args) {
-        
+        DBManager.loadDriver();
+        DBManager.connect();
+        DBManager.printTablaArticulosElectronicos();
+
+        almacenarDatos();
+        boolean salir = false;
+        while (!salir) {
+            salir = menuPrincipal();
+        }
+        guardarDatosEnCSV();
+
     }
 }

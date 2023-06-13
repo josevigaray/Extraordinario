@@ -121,7 +121,7 @@ public class DBManager {
         }
     }
     
-    public static ResultSet getTablaElectronica(int resultSetType, int resultSetConcurrency) {
+    public static ResultSet getArticulosElectronicos(int resultSetType, int resultSetConcurrency) {
         try {
             Statement stmt = conn.createStatement(resultSetType, resultSetConcurrency);
             ResultSet rs = stmt.executeQuery(DB_CONT_SELECT);
@@ -133,11 +133,31 @@ public class DBManager {
 
     }
     
-    public static ArrayList<Electronicos> mapeaELectronicos() {
+    public static void printTablaArticulosElectronicos() {
+        try {
+            ResultSet rs = DBManager.getArticulosElectronicos(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+            while (rs.next()) {
+                Integer id = rs.getInt(DB_CONT_ID);
+                String nombre = rs.getString(DB_CONT_NOM);
+                double precio = rs.getDouble(DB_CONT_PRE);
+                int stock = rs.getInt(DB_CONT_STOCK);
+                String tipo = rs.getString(DB_CONT_TIPO);
+                String categoria = rs.getString(DB_CONT_CAT);
+                String marca = rs.getString(DB_CONT_MARCA);
+                String so = rs.getString(DB_CONT_SO);
+                System.out.println(id + "\t" + nombre + "\t" + precio + "\t" + stock + "\t" + tipo + "\t" + categoria + "\t" + marca + "\t" + so);
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public static ArrayList<Electronicos> mapeaelectronicos() {
 
         ArrayList<Electronicos> listaDeArticulosElectronicos = new ArrayList();
         try {
-            ResultSet rs = DBManager.getTablaElectronica(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+            ResultSet rs = DBManager.getArticulosElectronicos(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             while (rs.next()) {
                 //Para cada registro, añade una autora al ArrayList
                 Integer id = rs.getInt(DB_CONT_ID);
@@ -152,7 +172,7 @@ public class DBManager {
                 listaDeArticulosElectronicos.add(nuevoArt);
             }
             rs.close();
-            return listaDeAutoras;
+            return listaDeArticulosElectronicos;
         } catch (SQLException ex) {
             ex.printStackTrace();
             return null;

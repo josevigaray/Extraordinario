@@ -65,6 +65,4 @@ public class Electronicos {
     public String toString() {
         return "Electronicos{" + "id=" + id + ", nombre=" + nombre + ", precio=" + precio + ", stock=" + stock + ", tipo=" + tipo + '}';
     }
-    
-    
 }
